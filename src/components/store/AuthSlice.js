@@ -11,7 +11,8 @@ export const loginUsers = createAsyncThunk(
         password: param.password,
         returnSecureToken: true,
       });
-      console.log("User has successfully signed up.")
+      localStorage.setItem("token", response.data.idToken);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       alert("Authentication failed");
@@ -25,6 +26,7 @@ const initialAuthState = {
   token: "",
   userId: "",
   error: "",
+  isLoggedIn: false
 };
 
 const AuthSlice = createSlice({
@@ -37,8 +39,9 @@ const AuthSlice = createSlice({
     builder.addCase(loginUsers.fulfilled, (state, action) => {
       state.isLoading = false;
       state.token = action.payload.idToken;
-      state.userId = action.payload.userId;
+      state.userId = action.payload.email;
       state.error = "";
+      state.isLoggedIn = true
     });
     builder.addCase(loginUsers.rejected, (state, action) => {
       state.isLoading = false;
@@ -51,4 +54,4 @@ const AuthSlice = createSlice({
 
 export const authActions = AuthSlice.actions;
 
-export default AuthSlice;
+export default AuthSlice.reducer;
