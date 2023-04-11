@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
 import { loginUsers } from "../store/AuthSlice";
 
@@ -10,13 +10,6 @@ const AuthScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const history = useHistory();
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    if (auth.token) {
-      history.push("/home");
-    }
-  }, [auth.token]);
 
   const switchAuthHandler = () => {
     setIsLogIn((prevState) => !prevState);
@@ -48,7 +41,7 @@ const AuthScreen = () => {
         url =
           "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBlvwm2UFysqlxp549MzHN_mTVXIn57d7s";
       }
-      dispatch(loginUsers({ url, email, password }));
+      dispatch(loginUsers({ url, email, password, history }));
     } else if (
       email.length === 0 ||
       password.length === 0 ||

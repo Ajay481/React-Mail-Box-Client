@@ -13,6 +13,7 @@ export const loginUsers = createAsyncThunk(
       });
       localStorage.setItem("token", response.data.idToken);
       console.log(response.data);
+      param.history.replace("/inbox");
       return response.data;
     } catch (error) {
       alert("Authentication failed");
@@ -26,7 +27,7 @@ const initialAuthState = {
   token: "",
   userId: "",
   error: "",
-  isLoggedIn: false
+  isLoggedIn: false,
 };
 
 const AuthSlice = createSlice({
@@ -41,7 +42,7 @@ const AuthSlice = createSlice({
       state.token = action.payload.idToken;
       state.userId = action.payload.email;
       state.error = "";
-      state.isLoggedIn = true
+      state.isLoggedIn = true;
     });
     builder.addCase(loginUsers.rejected, (state, action) => {
       state.isLoading = false;

@@ -4,15 +4,17 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useDispatch, useSelector } from "react-redux";
 import { detailList } from "../store/detailSlice";
 import { convertToRaw, ContentState } from "draft-js";
-import "./HomeScreen.css";
+import "./ComposeScreen.css";
+import { useHistory } from "react-router-dom";
 
-const HomeScreen = () => {
+const ComposeScreen = () => {
   const [mailId, setMailId] = useState("");
   const [subject, setSubject] = useState("");
   const senderEmail = useSelector((state) => state.auth.userId);
   const _contentState = ContentState.createFromText("");
   const raw = convertToRaw(_contentState);
   const [contentState, setContentState] = useState(raw);
+  const history = useHistory()
 
   const dispatch = useDispatch();
 
@@ -28,13 +30,13 @@ const HomeScreen = () => {
 
   const sendHandler = (e) => {
     e.preventDefault();
-    console.log(mailId, subject);
     dispatch(
       detailList({
         receiverEmail: mailId,
         senderEmail: senderEmail,
         subject: subject,
         message: contentState.blocks[0].text,
+        history
       })
     );
   };
@@ -72,4 +74,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default ComposeScreen;
