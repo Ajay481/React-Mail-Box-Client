@@ -14,7 +14,8 @@ const ComposeScreen = () => {
   const _contentState = ContentState.createFromText("");
   const raw = convertToRaw(_contentState);
   const [contentState, setContentState] = useState(raw);
-  const history = useHistory()
+  const history = useHistory();
+  const markAsRead = false;
 
   const dispatch = useDispatch();
 
@@ -36,7 +37,8 @@ const ComposeScreen = () => {
         senderEmail: senderEmail,
         subject: subject,
         message: contentState.blocks[0].text,
-        history
+        markAsRead,
+        history,
       })
     );
   };

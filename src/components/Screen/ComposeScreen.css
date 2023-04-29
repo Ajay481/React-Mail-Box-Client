@@ -1,3 +1,10 @@
 .editor {
     height: 75vh;
+    background-color: yellow;
+}
+
+.blueDot {
+    width: 8px;
+    height: 8px;
+    margin-top: 9px;
 }

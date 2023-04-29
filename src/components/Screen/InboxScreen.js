@@ -1,18 +1,30 @@
 import React, { useEffect } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Badge } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
 import Card from "../Card/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDetail } from "../store/detailSlice";
+import { updateDetail } from "../store/detailSlice";
 
 const InboxScreen = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const mailDetail = useSelector((state) => state.detail);
+  const loggedInEmailId = useSelector((state) => state.auth);
+  console.log(mailDetail.detailList);
+
+  const detailId = (id) => {
+    const detailObject = mailDetail?.detailList?.filter(
+      (item) => item.id === id
+    );
+
+    dispatch(updateDetail(detailObject[0]));
+    history.push(`/view/${id}`);
+  };
 
   useEffect(() => {
-    dispatch(fetchDetail());
+    dispatch(fetchDetail(loggedInEmailId.userId));
   }, []);
 
   return (
@@ -26,7 +38,20 @@ const InboxScreen = () => {
           >
             Compose
           </button>
-          <button className="w-100 p-1 border border-none">Inbox</button>
+          <button
+            className="w-100 p-1 border border-none"
+            onClick={() => history.push("/inbox")}
+          >
+            Inbox
+            <Badge bg="info">
+              {
+                mailDetail?.detailList?.filter(
+                  (item) => item.markAsRead === false
+                ).length
+              }
+              Unread
+            </Badge>
+          </button>
           <button className="w-100 p-1 border border-none">Unread</button>
           <button className="w-100 p-1 border border-none">Starred</button>
           <button className="w-100 p-1 border border-none">Drafts</button>
@@ -35,14 +60,20 @@ const InboxScreen = () => {
           <button className="w-100 p-1 border border-none">
             Deleted Items
           </button>
+          <button className="w-100 p-1 border border-none">Sent</button>
         </div>
       </Container>
       {mailDetail?.detailList?.map((item) => (
         <Card
+          onClick={() => detailId(item.id)}
           key={item.id}
           mailId={item.senderEmail}
-          subject={item.subject}
           message={item.message}
+          src={
+            !item?.markAsRead
+              ? "https://www.kindpng.com/picc/m/78-785490_blue-dot-transparent-background-hd-png-download.png"
+              : null
+          }
         />
       ))}
     </div>
