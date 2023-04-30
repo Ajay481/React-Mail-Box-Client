@@ -28,7 +28,6 @@ export const detailList = createAsyncThunk(
 export const fetchDetail = createAsyncThunk(
   "users/fetchDetail",
   async (emailId) => {
-  
     try {
       const response = await axios.get(
         "https://react-authentication-99d1c-default-rtdb.firebaseio.com/details.json"
@@ -52,12 +51,28 @@ export const fetchDetail = createAsyncThunk(
   }
 );
 
+export const deleteDetail = createAsyncThunk(
+  "users/deleteDetail",
+  async (param, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `https://react-authentication-99d1c-default-rtdb.firebaseio.com/details/${param.id}.json`
+      );
+      console.log(response.data);
+      param.dispatch(param.fetchDetail(param.email));
+    } catch (error) {
+      alert("Expense List fetched unsuccessful");
+      return error;
+    }
+  }
+);
+
 export const updateDetail = createAsyncThunk(
   "user/updateDetail",
   async (param, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `https://react-authentication-99d1c-default-rtdb.firebaseio.com/details/${param.id}.json  `,
+        `https://react-authentication-99d1c-default-rtdb.firebaseio.com/details/${param.id}.json`,
         {
           receiverEmail: param.receiverEmail,
           senderEmail: param.senderEmail,
