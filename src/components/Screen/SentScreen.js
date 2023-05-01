@@ -2,28 +2,26 @@ import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Card from "../Card/Card";
 import { useDispatch, useSelector } from "react-redux";
-import { inboxDetail } from "../store/detailSlice";
+import { sentDetail } from "../store/detailSlice";
 import { updateDetail } from "../store/detailSlice";
 import { deleteDetail } from "../store/detailSlice";
 import Layout from "./Layout";
 
-const InboxScreen = () => {
+const SentScreen = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const mailDetail = useSelector((state) => state.detail);
   const loggedInEmailId = useSelector((state) => state.auth);
- 
-  const detailId = (id) => {
-    const detailObject = mailDetail?.inboxList?.filter(
-      (item) => item.id === id
-    );
 
-    dispatch(updateDetail(detailObject[0]));
-    history.push(`/view/${id}/inbox`);
+  const detailId = (id) => {
+    const detailObject = mailDetail?.sentList?.filter((item) => item.id === id);
+
+    // dispatch(updateDetail(detailObject[0]));
+    history.push(`/view/${id}/sent`);
   };
 
   useEffect(() => {
-      dispatch(inboxDetail(loggedInEmailId.userId));   
+    dispatch(sentDetail(loggedInEmailId.userId));
   }, []);
 
   const removeHandler = (id) => {
@@ -31,9 +29,9 @@ const InboxScreen = () => {
       deleteDetail({
         id,
         dispatch,
-        fn: inboxDetail,
+        fn: sentDetail,
         email: loggedInEmailId.userId,
-        type: "inbox",
+        type: "sent",
       })
     );
   };
@@ -41,19 +39,14 @@ const InboxScreen = () => {
   return (
     <Layout>
       <div>
-        {mailDetail?.inboxList?.map((item) => (
+        {mailDetail?.sentList?.map((item) => (
           <Card
             onClick={() => detailId(item.id)}
             key={item.id}
             id={item.id}
             mailId={item.senderEmail}
-            message={item.message}
             createdAt={item?.createdAt}
-            src={
-              !item?.markAsRead
-                ? "https://www.kindpng.com/picc/m/78-785490_blue-dot-transparent-background-hd-png-download.png"
-                : null
-            }
+            message={item.message}
             removeHandler={removeHandler}
           />
         ))}
@@ -62,4 +55,4 @@ const InboxScreen = () => {
   );
 };
 
-export default InboxScreen;
+export default SentScreen;

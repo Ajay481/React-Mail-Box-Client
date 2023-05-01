@@ -5,12 +5,16 @@ import { useSelector } from "react-redux";
 const ViewCard = () => {
   const [objectMail, setObjectMail] = useState({});
 
-  const { id } = useParams();
+  const { id, type } = useParams();
 
-  const mailDetail = useSelector((state) => state?.detail?.detailList);
+  const inbox = useSelector((state) => state?.detail?.inboxList);
+  const sent = useSelector((state) => state?.detail?.sentList);
 
   useEffect(() => {
-    const detailObject = mailDetail?.filter((item) => item.id === id);
+    const detailObject =
+      type === "inbox"
+        ? inbox?.filter((item) => item.id === id)
+        : sent?.filter((item) => item.id === id);
     setObjectMail(detailObject[0]);
   }, []);
 

@@ -18,6 +18,7 @@ const Card = (props) => {
           <div className="ms-2">{props.mailId}</div>
         </div>
         <div>{props.message}</div>
+        <div>{new Date(props?.createdAt).toLocaleString()}</div>
       </Container>
       <button onClick={() => props.removeHandler(props.id)}>Delete</button>
     </div>

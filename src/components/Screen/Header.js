@@ -1,11 +1,21 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authActions } from "../store/AuthSlice";
 
 const Header = () => {
   const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const searchHandler = (e) => {
     e.preventDefault();
     setSearch(e.target.value);
+  };
+
+  const logoutHandler = () => {
+    dispatch(authActions.logout());
+    history.replace("/");
   };
   return (
     <header className="bg-secondary">
@@ -20,6 +30,9 @@ const Header = () => {
           value={search}
         />
         <button className="bg-primary text-white">Search</button>
+        <button className="bg-info" onClick={logoutHandler}>
+          Logout
+        </button>
       </div>
     </header>
   );

@@ -33,6 +33,16 @@ const initialAuthState = {
 const AuthSlice = createSlice({
   name: "Authentication",
   initialState: initialAuthState,
+  reducers: {
+    logout(state) {
+      localStorage.removeItem("token");
+      state.isLoading = false;
+      state.token = "";
+      state.userId = "";
+      state.error = "";
+      state.isLoggedIn = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loginUsers.pending, (state) => {
       state.isLoading = true;
