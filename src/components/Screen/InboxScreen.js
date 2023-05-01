@@ -12,7 +12,7 @@ const InboxScreen = () => {
   const dispatch = useDispatch();
   const mailDetail = useSelector((state) => state.detail);
   const loggedInEmailId = useSelector((state) => state.auth);
- 
+
   const detailId = (id) => {
     const detailObject = mailDetail?.inboxList?.filter(
       (item) => item.id === id
@@ -23,7 +23,13 @@ const InboxScreen = () => {
   };
 
   useEffect(() => {
-      dispatch(inboxDetail(loggedInEmailId.userId));   
+    const interval = setInterval(() => {
+      dispatch(inboxDetail(loggedInEmailId.userId));
+    }, [2000]);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const removeHandler = (id) => {
